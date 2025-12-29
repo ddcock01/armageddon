@@ -21,3 +21,12 @@ Modern orgs expect engineers to understand:
     how cache + origin request policies interact 
     cache-control semantics (prefer Cache-Control over Expires)
 
+
+Terraform Overlay: lab2b_cache_correctness.tf
+    This assumes you already have aws_cloudfront_distribution.chewbacca_cf01 from Lab 2.
+
+1) Cache policy for static content (aggressive)
+# lab2b_cache_correctness.tf
+
+AWS warns that caching based on “high-cardinality headers” (like User-Agent) is usually a bad idea because it explodes variations.
+# lab2b_cache_correctness.tf

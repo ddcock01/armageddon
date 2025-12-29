@@ -1,0 +1,19 @@
+Here, it is assumed that you have your own URL. I'm using chewbacca-growl.com as an example
+
+
+Alright — Lab 1C-Bonus-B (and yes, we’ll assume the students own chewbacca-growl.com).
+This turns your stack into a real enterprise pattern:
+  Public ALB (internet-facing)
+  Private EC2 targets (no public IP)
+  TLS with ACM for chewbacca-growl.com
+  WAF attached to ALB
+  CloudWatch Dashboard
+  SNS alarm on ALB 5xx spikes
+
+This is exactly how modern companies ship: IaC + private compute + managed ingress + TLS + WAF + monitoring + paging. 
+If you can submit this in Terraform, you’re no longer “a student who clicked around”— you’re a junior cloud engineers.
+
+Below is a Terraform skeleton overlay you can add to your existing 1C + Bonus-A repo.
+
+Add 1c_bonus_variables.tf (append to variables.tf)
+

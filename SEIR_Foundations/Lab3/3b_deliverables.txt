@@ -54,6 +54,16 @@ Students prove:
         TGW attachments exist in both regions
         routes point cross-region CIDRs to TGW
 
+6) AWS CLI verification (students can prove the bucket/logs exist)
+
+        aws s3 ls s3://Class_Lab3/
+        # If logs are under a folder/prefix:
+        aws s3 ls s3://Class_Lab3/cloudfront-logs/ --recursive | tail -n 20
+
+Download one file manually (sanity check):
+
+    aws s3 cp s3://Class_Lab3/cloudfront-logs/<somefile>.gz .
+
 Script 1 — malgus_residency_proof.py
 Creates a “DB only in Tokyo” proof file.
 
@@ -72,6 +82,45 @@ Script 5 — malgus_cloudfront_log_explainer.py (optional)
 If you ingest CloudFront standard logs into S3, this script reads a log file and counts Hit/Miss/RefreshHit.
 
 CloudFront standard logs reference Hit / RefreshHit semantics. 
+A) Standard logs in S3 (downloaded locally)
+
+        python3 malgus_cloudfront_log_explainer.py --mode standard cloudfront.log.gz
+        python3 malgus_cloudfront_log_explainer.py --mode standard cloudfront_part1.log cloudfront_part2.log
+
+B) Real-time logs as JSON lines
+
+        python3 malgus_cloudfront_log_explainer.py --mode realtime realtime_logs.jsonl
+
+Final Lab Assumptions (Locked)
+    S3 Bucket: Class_Lab3
+    CloudFront Logs Prefix: Chwebacca-logs/ ← intentionally misspelled
+    AWS Account ID: 200819971986
+
+Running Scripts:
+
+        python3 malgus_cloudfront_log_explainer.py --latest 5
+        python3 malgus_cloudfront_log_explainer.py --prefix cloudfront-logs/ --latest 10
+        python3 malgus_cloudfront_log_explainer.py --prefix cloudfront-logs/ --latest 5 --keep
+
+
+From stdin (nice for pipelines)
+
+        zcat cloudfront.log.gz | python3 malgus_cloudfront_log_explainer.py --mode standard -
+
+Where “Hit / Miss / RefreshHit” come from (student-facing truth)
+    In standard CloudFront logs, you usually read the field:
+        x-edge-result-type (primary)
+        sometimes also x-edge-response-result-type
+
+    Values commonly include: Hit, Miss, RefreshHit, plus other states like Error, LimitExceeded, etc.
+
+That’s why the script reports “Other:*” — so students don’t blindly ignore unusual outcomes.
+
+
+
+        
+
+
 
 
 
